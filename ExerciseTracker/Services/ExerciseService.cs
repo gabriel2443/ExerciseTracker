@@ -36,7 +36,7 @@ public class ExerciseService : IExerciseService
         exerciseDb.ExerciseName = exerciseToUpdate.ExerciseName;
         exerciseDb.StartTime = exerciseToUpdate.StartTime;
         exerciseDb.EndTime = exerciseToUpdate.EndTime;
-        exerciseDb.Duration = exerciseToUpdate.Duration;
+        exerciseDb.Duration = exerciseToUpdate.EndTime - exerciseToUpdate.StartTime;
         exerciseDb.Comments = exerciseToUpdate.Comments;
 
         await _context.SaveChangesAsync();
@@ -44,9 +44,9 @@ public class ExerciseService : IExerciseService
 
     public async Task DeleteExercise(int id)
     {
-        var exerciseId = await _context.Exercises.FindAsync(id);
+        var exerciseDb = await _context.Exercises.FindAsync(id);
 
-        _context.Exercises.Remove(exerciseId);
+        if (exerciseDb is not null) _context.Exercises.Remove(exerciseDb);
         await _context.SaveChangesAsync();
     }
 }
