@@ -43,5 +43,34 @@ public static class ExerciseHtpp
         }
     }
 
-    internal static async Task
+    internal static async Task UpdateExercise(int id, Exercise exercise)
+    {
+        try
+        {
+            string url = $"https://localhost:7112/api/exercises/{id}";
+            string json = JsonSerializer.Serialize(exercise);
+            StringContent httpContent = new(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage res = await httpClient.PutAsync(url, httpContent);
+            res.EnsureSuccessStatusCode();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}");
+        }
+    }
+
+    internal static async Task DeleteExercise(int id)
+    {
+        try
+        {
+            string url = $"https://localhost:7112/api/exercises/{id}";
+            HttpResponseMessage res = await httpClient.DeleteAsync(url);
+
+            res.EnsureSuccessStatusCode();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}");
+        }
+    }
 }
