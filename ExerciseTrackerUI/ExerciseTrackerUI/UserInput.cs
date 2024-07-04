@@ -48,11 +48,14 @@ public class UserInput
     public async Task ShowExercises()
     {
         var exercises = await ExerciseHtpp.GetAllExercises();
-
-        foreach (var exercise in exercises)
+        if (exercises.Any())
         {
-            Console.WriteLine($"{exercise.Id}. Name:{exercise.ExerciseName} || Start Date:{exercise.StartTime.ToString("MM-dd-yyyy HH:mm:ss")} || End Date:{exercise.EndTime.ToString("MM-dd-yyyy HH:mm:ss")} || Duration:{exercise.Duration.ToString(@"hh\:mm\:ss")} || Comments:{exercise.Comments}\n");
+            foreach (var exercise in exercises)
+            {
+                Console.WriteLine($"{exercise.Id}. Name:{exercise.ExerciseName} || Start Date:{exercise.StartTime.ToString("MM-dd-yyyy HH:mm:ss")} || End Date:{exercise.EndTime.ToString("MM-dd-yyyy HH:mm:ss")} || Duration:{exercise.Duration.ToString(@"hh\:mm\:ss")} || Comments:{exercise.Comments}\n");
+            }
         }
+        else Console.WriteLine("No exercise found");
     }
 
     public async Task AddExercise()
@@ -104,26 +107,24 @@ public class UserInput
     public async Task UpdateExercise()
 
     {
-        var exercises = await ExerciseHtpp.GetAllExercises();
-
         Console.Clear();
+        var exercises = ExerciseHtpp.GetAllExercises();
         await ShowExercises();
         var exercise = new Exercise();
         Console.WriteLine("Please enter the exercise number you want to update or type 0  to go back to menu");
         var exerciseId = Console.ReadLine();
-
-        /*        if (Convert.ToInt32(exerciseId) !=(exercises.Select(ex => ex.Id)))
-                {
-                    Console.WriteLine("This exercise does not exist");
-                    return;
-                }*/
+        if (exercises is null)
+        {
+            Console.WriteLine("Exercise does not exist");
+            return;
+        }
         while (!int.TryParse(exerciseId, out _))
         {
-            Console.WriteLine("Invalid shift ID. Please enter a valid number.");
+            Console.WriteLine("Invalid exercise ID. Please enter a valid number.");
 
             exerciseId = Console.ReadLine();
         }
-        Console.WriteLine("Please enter the exercise number you want to update or type 0  to go back to menu");
+        Console.WriteLine("Please enter the updated exercise  you want to update or type 0  to go back to menu");
         var name = Console.ReadLine();
 
         while (string.IsNullOrEmpty(name))
